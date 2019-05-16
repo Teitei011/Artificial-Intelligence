@@ -2,11 +2,17 @@ import scipy.special
 import numpy as np
 import os
 
-class NeuralLayer: # TODO: Arrumar a criacao dos weights
+class NeuralLayer:
     def __init__(self, neurons_inputs, neurons):
         self.weights = []
+
         for i in range(neurons):
-            self.weights.append(np.random.normal(0.0, pow(neurons_inputs, -0.5)))
+            self.temp = []
+            for j in range(neurons_inputs):
+                self.temp.append(np.random.normal(0.0, pow(neurons_inputs, -0.5)))
+
+            self.weights.append(self.temp)
+
 
     def show(self):
         return self.weights
@@ -24,11 +30,11 @@ class NeuralNetwork:
 
             # Input Layer
             if (i == 0):
-                self.layers.append(NeuralLayer(self.input_layer, self.neurons))
+                self.layers.append(NeuralLayer(self.input_layer, 1))
 
             # Output Layer
-            if (i == self.number_of_layers):
-                self.layers.append(NeuralLayer(self.output_layer, self.neurons))
+            elif (i + 1 == self.number_of_layers):
+                self.layers.append(NeuralLayer(self.output_layer, 1))
 
             # Hidden Layers
             else:
@@ -85,6 +91,12 @@ class NeuralNetwork:
         return array
 
     def train(self, input_array, output_array):
+        pass
+
+    def feedforward(self):
+        pass
+
+    def backpropagation(self):
         pass
 
     def query(self, input_array):
