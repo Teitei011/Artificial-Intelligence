@@ -1,6 +1,6 @@
 #include <Eigen/Dense>
 #include <vector>
-#include "NeuralLayer.hpp"
+#include <iostream>
 
 using Eigen::MatrixXd;
 
@@ -14,6 +14,10 @@ class NeuralNetwork{
   NeuralNetwork(int number_of_layers, int neurons, int input_layer, int output_layer, float learning_rate);
 
 public:
+    void createNetwork(std::vector<MatrixXd> layers, int neurons);
+
+    void show();
+
     void saveBrain();
     void loadBrain();
     std::vector<float> activation();
@@ -34,6 +38,12 @@ NeuralNetwork::NeuralNetwork(int number_of_layers, int neurons, int input_layer,
 
   // Creating all the layers
   std::vector<MatrixXd> layers;
+  createNetwork(layers, neurons);
+
+  show();
+}
+
+void NeuralNetwork::createNetwork(std::vector<MatrixXd> layers, int neurons){
   for (int i = 0; i < _number_of_layers; ++i){
     // Input Layer
     if (i == 0) layers.push_back(MatrixXd::Random(1, _input_layer));
@@ -45,6 +55,12 @@ NeuralNetwork::NeuralNetwork(int number_of_layers, int neurons, int input_layer,
     else if (i - 1 == _number_of_layers) layers.push_back(MatrixXd::Random(1, _output_layer));
   }
 
+}
+
+void NeuralNetwork::show(){
+  for (int i = 0; i < _number_of_layers; ++i){
+    std::cout << layers[i] << std::endl;
+  }
 }
 
 void NeuralNetwork::saveBrain(){
