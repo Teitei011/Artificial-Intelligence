@@ -1,6 +1,7 @@
 import scipy.special
 import numpy as np
 import os
+from math import exp
 
 class NeuralLayer:
     def __init__(self, neurons_inputs, neurons):
@@ -15,6 +16,9 @@ class NeuralLayer:
 
 
     def show(self):
+        return self.weights
+
+    def matrix(self):
         return self.weights
 
 class NeuralNetwork:
@@ -85,9 +89,36 @@ class NeuralNetwork:
         for i in range(int(number_of_layers)):
             self.layers[i] = np.load("weights[" + str(i) + "].npy") # TODO: See why this isn´t working
 
-    def activation(array):
+
+    def query(self, input_array):
+        # Convert input into 2d Array
+        inputs = input_array
+
+        # Calculate signals into hidden layer
+        for i in range(self.number_of_layers):
+            if (i == 0): # First Time
+                hidden_inputs = np.dot(self.layers[i].matrix(), inputs)
+
+                # Calculate signal emerging from hiden layer
+                final_inputs = self.activation(hidden_inputs)
+
+                # Calculate the signal emerging from final outputs
+                final_outputs = self.activation(final_inputs)
+
+            else:
+                hidden_inputs = np.dot(self.layers[i].matrix(), self.layers[i-1])
+
+                # Calculate signal emerging from hiden layer
+                final_inputs = self.activation(hidden_inputs)
+
+                # Calculate the signal emerging from final outputs
+                final_outputs = self.activation(final_inputs)
+
+        return final_outputs
+
+    def activation(self, array):
         for i in range(len(array)):
-            array[i] = scipi.special.expit(array[i])
+            array[i] = 1 / ( 1 + exp(-array[i]))
         return array
 
     def train(self, input_array, output_array):
@@ -97,7 +128,4 @@ class NeuralNetwork:
         pass
 
     def backpropagation(self):
-        pass
-
-    def query(self, input_array):
         pass
