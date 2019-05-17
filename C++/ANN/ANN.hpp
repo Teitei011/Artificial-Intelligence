@@ -19,7 +19,7 @@ public:
     std::vector<MatrixXd> createNetwork(int _number_of_layers, int _input_layer, int _neurons,  int _output_layer);
 
     void show();
-    std::vector<MatrixXd> activation();
+    std::vector<MatrixXd> activation(std::vector<MatrixXd> *current);
 
     void saveBrain();
     void loadBrain();
@@ -67,15 +67,17 @@ void NeuralNetwork::show(){
 }
 
 std::vector<MatrixXd>NeuralNetwork::activation(std::vector<MatrixXd> *current){
-  new (&current) Map<RowVectorXi>(1. / (1. +  e**(-data)));
+  new (&current) Map<MatrixXd>(1. / (1. +  e**(-data)));
 }
 
 
 void NeuralNetwork::saveBrain(){
-
+  
 }
 
+void loadBrain(){
 
+}
 
 std::vector<float> NeuralNetwork::query(){
 
