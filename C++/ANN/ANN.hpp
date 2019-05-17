@@ -10,17 +10,19 @@ class NeuralNetwork{
   int _input_layer, _output_layer;
   int _learning_rate;
 
+  double e{2.71828182845904523536};
+
   std::vector<MatrixXd> _layers;
-  NeuralNetwork(int number_of_layers, int neurons, int input_layer, int output_layer, float learning_rate);
+  NeuralNetwork(int number_of_layers, int neurons, int input_layer, int output_layer, float learning_rate = 0.01);
 
 public:
     std::vector<MatrixXd> createNetwork(int _number_of_layers, int _input_layer, int _neurons,  int _output_layer);
 
     void show();
+    std::vector<MatrixXd> activation();
 
     void saveBrain();
     void loadBrain();
-    std::vector<float> activation();
     std::vector<float> query();
     std::vector<float> train();
 
@@ -58,17 +60,22 @@ std::vector<MatrixXd> NeuralNetwork::createNetwork(int _number_of_layers, int _i
   return layers;
 }
 
-
-void NeuralNetwork::saveBrain(){
+void NeuralNetwork::show(){
   for (int i = 0; i < _number_of_layers; ++i){
-    
+    std::cout << layers[i]; << '\n';
   }
 }
 
-//
-// std::vector<float> NeuralNetwork::activation(current){
-//
-// }
+std::vector<MatrixXd>NeuralNetwork::activation(std::vector<MatrixXd> *current){
+  new (&current) Map<RowVectorXi>(1. / (1. +  e**(-data)));
+}
+
+
+void NeuralNetwork::saveBrain(){
+
+}
+
+
 
 std::vector<float> NeuralNetwork::query(){
 
