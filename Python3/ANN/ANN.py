@@ -3,24 +3,6 @@ import numpy as np
 import os
 from math import exp
 
-class NeuralLayer:
-    def __init__(self, neurons_inputs, neurons):
-        self.weights = []
-
-        for i in range(neurons):
-            self.temp = []
-            for j in range(neurons_inputs):
-                self.temp.append(np.random.normal(0.0, pow(neurons_inputs, -0.5)))
-
-            self.weights.append(self.temp)
-
-
-    def show(self):
-        return self.weights
-
-    def matrix(self):
-        return self.weights
-
 class NeuralNetwork:
     def __init__(self, _layers, _neurons, _input_layer , _output_layer, _learning_rate):
         self.number_of_layers = _layers + 2 # It has + 2 because the input layer and the output layer
@@ -34,26 +16,37 @@ class NeuralNetwork:
 
             # Input Layer
             if (i == 0):
-                self.layers.append(NeuralLayer(self.input_layer, 1))
+                self.layers.append(createNeuraLayer(self.input_layer, 1))
 
             # Output Layer
             elif (i + 1 == self.number_of_layers):
-                self.layers.append(NeuralLayer(self.output_layer, 1))
+                self.layers.append(createNeuraLayer(self.output_layer, 1))
 
             # Hidden Layers
             else:
-                self.layers.append(NeuralLayer(self.neurons, self.neurons))
+                self.layers.append(createNeuraLayer(self.neurons, self.neurons))
 
+    def createNeuraLayer(self.neurons_inputs, self.neurons ):
+        self.weights = []
+
+        for i in range(neurons):
+            self.temp = []
+            for j in range(neurons_inputs):
+                self.temp.append(np.random.normal(0.0, pow(neurons_inputs, -0.5)))
+
+            self.weights.append(self.temp)
+
+        return self.weights
 
     def showBrain(self):
         for i in range(self.number_of_layers):
             if (i == 0):
-                print("Input Layer: " + str(self.layers[i].show()))
+                print("Input Layer: " + str(self.layers[i]))
 
             elif (i + 1 == self.number_of_layers):
-                print("Ouput Layer: " + str(self.layers[i].show()))
+                print("Ouput Layer: " + str(self.layers[i]))
             else:
-                print("Hidden Layer: " + str(self.layers[i].show()))
+                print("Hidden Layer: " + str(self.layers[i]))
 
     def save(self):
         print("Creating directory...")
@@ -122,10 +115,39 @@ class NeuralNetwork:
         return array
 
     def train(self, input_array, output_array):
-        pass
+        inputs = input_array
 
-    def feedforward(self):
-        pass
+        # Calculate signals into hidden layer
+        for i in range(self.number_of_layers):
+            if (i == 0): # First Time
+                hidden_inputs = np.dot(self.layers[i].matrix(), inputs)
 
-    def backpropagation(self):
-        pass
+                # Calculate signal emerging from hiden layer
+                final_inputs = self.activation(hidden_inputs)
+
+                # Calculate the signal emerging from final outputs
+                final_outputs = self.activation(final_inputs)
+
+            else:
+                hidden_inputs = np.dot(self.layers[i].matrix(), self.layers[i-1])
+
+                # Calculate signal emerging from hiden layer
+                final_inputs = self.activation(hidden_inputs)
+
+                # Calculate the signal emerging from final outputs
+                final_outputs = self.activation(final_inputs)
+
+        # Calculating the erros to each layer
+        for i in range(self.number_of_layers):
+            output_errors, hidden_errors = calculate_error(self, target, final_outputs)
+            backpropagation(self, output_errors, final_outputs, hidden_errors, hidden_outputs)
+
+    def calculate_error(self, target, final_outputs):
+        output_errors = target - final_outputs
+        hidden_errors = np.dot(self.layers[i], output_errors)
+
+        return output_errors, hidden_errors
+
+    def backpropagation(self, output_errors, final_outputs, hidden_errors, hidden_outputs):
+        self.weigth_hidden_output += self.learning_rate* np.dot((output_errors * final_outputs * (1.0 - final_outputs)), np.transpose(hidden_errors))
+        self.weigth_input_hidden += self.learning_rate * np.dot((hidden_errors * hidden_outputs * (1.0 - hidden_outputs)), np.transpose(inputs))
