@@ -3,6 +3,27 @@ import numpy as np
 import os
 from math import exp
 
+def createNeuralLayer(neurons_inputs, neurons):
+    weights = []
+
+    if (neurons == 1): # Para o input e o output
+        temp = []
+        for j in range(neurons_inputs):
+            temp.append(np.random.normal(0.0, pow(neurons_inputs, -0.5)))
+
+        weights.append(temp)
+
+    else:
+        for i in range(neurons):
+            temp = []
+            for j in range(neurons_inputs):
+                temp.append(np.random.normal(0.0, pow(neurons_inputs, -0.5)))
+
+            weights.append(temp)
+
+    return weights
+
+
 class NeuralNetwork:
     def __init__(self, _layers, _neurons, _input_layer , _output_layer, _learning_rate):
         self.number_of_layers = _layers + 2 # It has + 2 because the input layer and the output layer
@@ -13,30 +34,18 @@ class NeuralNetwork:
         self.layers = []
 
         for i in range(self.number_of_layers):
-
             # Input Layer
             if (i == 0):
-                self.layers.append(createNeuraLayer(self.input_layer, 1))
+                self.layers.append(createNeuralLayer(self.input_layer, 1))
 
             # Output Layer
             elif (i + 1 == self.number_of_layers):
-                self.layers.append(createNeuraLayer(self.output_layer, 1))
+                self.layers.append(createNeuralLayer(self.output_layer, 1))
 
             # Hidden Layers
             else:
-                self.layers.append(createNeuraLayer(self.neurons, self.neurons))
+                self.layers.append(createNeuralLayer(self.neurons, self.neurons))
 
-    def createNeuraLayer(self.neurons_inputs, self.neurons ):
-        self.weights = []
-
-        for i in range(neurons):
-            self.temp = []
-            for j in range(neurons_inputs):
-                self.temp.append(np.random.normal(0.0, pow(neurons_inputs, -0.5)))
-
-            self.weights.append(self.temp)
-
-        return self.weights
 
     def showBrain(self):
         for i in range(self.number_of_layers):
@@ -90,7 +99,7 @@ class NeuralNetwork:
         # Calculate signals into hidden layer
         for i in range(self.number_of_layers):
             if (i == 0): # First Time
-                hidden_inputs = np.dot(self.layers[i].matrix(), inputs)
+                hidden_inputs = np.dot(self.layers[i], inputs)
 
                 # Calculate signal emerging from hiden layer
                 final_inputs = self.activation(hidden_inputs)
@@ -99,7 +108,7 @@ class NeuralNetwork:
                 final_outputs = self.activation(final_inputs)
 
             else:
-                hidden_inputs = np.dot(self.layers[i].matrix(), self.layers[i-1])
+                hidden_inputs = np.dot(self.layers[i], self.layers[i-1])
 
                 # Calculate signal emerging from hiden layer
                 final_inputs = self.activation(hidden_inputs)

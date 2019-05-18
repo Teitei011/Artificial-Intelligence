@@ -45,24 +45,22 @@ NeuralNetwork::NeuralNetwork(int number_of_layers, int neurons, int input_layer,
 }
 
 std::vector<MatrixXd> NeuralNetwork::createNetwork(int _number_of_layers, int _input_layer, int _neurons, int _output_layer){
-  std::vector<MatrixXd> layers;
 
   for (int i = 0; i < _number_of_layers; ++i){
     // Input Layer
-    if (i == 0) layers.push_back(MatrixXd::Random(_input_layer, 1));
+    if (i == 0) _layers.push_back(MatrixXd::Random(_input_layer, 1));
 
     // Creating Hidden Layers
-    else if (i == 1) layers.push_back(MatrixXd::Random(_neurons, _neurons));
+    else if (i == 1) _layers.push_back(MatrixXd::Random(_neurons, _neurons));
 
     // Output Layer
-    else if (i - 1 == _number_of_layers) layers.push_back(MatrixXd::Random(_output_layer, 1));
+    else if (i - 1 == _number_of_layers) _layers.push_back(MatrixXd::Random(_output_layer, 1));
   }
-  return layers;
 }
 
 void NeuralNetwork::show(){
   for (int i = 0; i < _number_of_layers; ++i){
-    std::cout << layers[i]; << '\n';
+    std::cout << _layers[i] << '\n';
   }
 }
 
@@ -72,7 +70,7 @@ std::vector<MatrixXd>NeuralNetwork::activation(std::vector<MatrixXd> *current){
 
 
 void NeuralNetwork::saveBrain(){
-  
+
 }
 
 void loadBrain(){
