@@ -3,6 +3,8 @@ import numpy as np
 import os
 from math import exp
 
+#TODO: ADD Bias 
+
 def createNeuralLayer(neurons_inputs, neurons):
     weights = []
 
@@ -51,7 +53,6 @@ class NeuralNetwork:
         for i in range(self.number_of_layers):
             if (i == 0):
                 print("Input Layer: " + str(self.layers[i]))
-
             elif (i + 1 == self.number_of_layers):
                 print("Ouput Layer: " + str(self.layers[i]))
             else:
@@ -99,29 +100,27 @@ class NeuralNetwork:
         # Calculate signals into hidden layer
         for i in range(self.number_of_layers):
             if (i == 0): # First Time
+                print(self.layers[0])
+                print("\n\n")
+                print(inputs)
                 hidden_inputs = np.dot(self.layers[i], inputs)
-
+                # print(hidden_inputs)
                 # Calculate signal emerging from hiden layer
-                final_inputs = self.activation(hidden_inputs)
-
-                # Calculate the signal emerging from final outputs
-                final_outputs = self.activation(final_inputs)
+                final_inputs = self.activation(hidden_inputs[0])
+                self.layers[i] = final_inputs
 
             else:
                 hidden_inputs = np.dot(self.layers[i], self.layers[i-1])
-
+                print(hidden_inputs)
                 # Calculate signal emerging from hiden layer
-                final_inputs = self.activation(hidden_inputs)
+                final_inputs = self.activation(hidden_inputs[0])
+                self.layers[i] = final_inputs
 
-                # Calculate the signal emerging from final outputs
-                final_outputs = self.activation(final_inputs)
 
         return final_outputs
 
-    def activation(self, array):
-        for i in range(len(array)):
-            array[i] = 1 / ( 1 + exp(-array[i]))
-        return array
+    def activation(self, data):
+        return 1 / ( 1 + exp(-data))
 
     def train(self, input_array, output_array):
         inputs = input_array
@@ -129,22 +128,17 @@ class NeuralNetwork:
         # Calculate signals into hidden layer
         for i in range(self.number_of_layers):
             if (i == 0): # First Time
-                hidden_inputs = np.dot(self.layers[i].matrix(), inputs)
+                hidden_inputs = np.dot(self.layers[i], inputs)
 
                 # Calculate signal emerging from hiden layer
-                final_inputs = self.activation(hidden_inputs)
+                final_inputs = self.activation(hidden_inputs[0])
 
-                # Calculate the signal emerging from final outputs
-                final_outputs = self.activation(final_inputs)
 
             else:
-                hidden_inputs = np.dot(self.layers[i].matrix(), self.layers[i-1])
+                hidden_inputs = np.dot(self.layers[i], self.layers[i-1])
 
                 # Calculate signal emerging from hiden layer
-                final_inputs = self.activation(hidden_inputs)
-
-                # Calculate the signal emerging from final outputs
-                final_outputs = self.activation(final_inputs)
+                final_inputs = self.activation(hidden_inputs[0])
 
         # Calculating the erros to each layer
         for i in range(self.number_of_layers):
