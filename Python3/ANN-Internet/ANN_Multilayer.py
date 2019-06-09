@@ -55,9 +55,9 @@ class Neural_Network(object):
         # activation function
         return 1 / (1 + np.exp(-a))
 
-    def sigmoidPrime(self, s):
+    def sigmoidPrime(self, a):
         #derivative of sigmoid
-        return s * (1 - s)
+        return a * (1 - a)
 
     def backpropagation(self, X, y, o):
         # backward propgate through the network
