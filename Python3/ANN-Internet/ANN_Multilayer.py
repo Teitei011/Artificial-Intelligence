@@ -13,16 +13,20 @@ class Neural_Network(object):
                     # Creating the layer
 
         self.layers = []
+        self.bias = []
 
         # Creating the first hidden layer
         self.layers.append(np.random.randn(self._inputSize, self._hiddenSize))
+        self.bias.append(np.random.randn(self._inputSize, self._hiddenSize))
 
         # For the hidden layers in the middle
         for i in range(self._number_of_layers):
             self.layers.append(np.random.randn(self._hiddenSize, self._hiddenSize))
+            self.bias.append(np.random.randn(self._hiddenSize, self._hiddenSize))
 
         # For the last hidden layer
         self.layers.append(np.random.randn(self._hiddenSize, self._outputSize))
+        self.bias.append(np.random.randn(self._hiddenSize, self._outputSize))
 
     def show(self):
         print("\n----------------------------------\n")
