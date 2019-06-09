@@ -60,7 +60,7 @@ class Neural_Network(object):
         return a * (1 - a)
 
     def loss_function(self, X, Y):
-        print ("Loss: " + str(np.mean(np.square(Y - feedforward(X))))) # mean sum squared loss
+        print ("Loss: " + str(np.mean(np.square(Y - X)))) # mean sum squared loss
 
     def backpropagation(self, X, y, o):
         # backward propgate through the network
@@ -74,6 +74,6 @@ class Neural_Network(object):
         self.W2 += self.z2.T.dot(self.o_delta) # adjusting second set (hidden --> output) weights
 
     def train (self, X, y):
-        o = self.feedforward(X)
-        self.backpropagation(X, y, o)
-        loss_function(X, Y)
+        output = self.feedforward(X)
+        self.backpropagation(X, y, output)
+        loss_function(output, Y)
