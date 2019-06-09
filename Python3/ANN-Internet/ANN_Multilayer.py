@@ -32,10 +32,38 @@ class Neural_Network(object):
         print("\n----------------------------------\n")
 
     def save(self):
-        pass
+            print("Creating directory...")
+            try:
+                path = os.mkdir("Weights")
+            except:
+                print("Directory already created...")
+
+            os.chdir("Weights/")
+
+            # Creating file to know how many arrays it has
+            data = open("Number_of_layers.txt", "w")
+            data.write(str(self._number_of_layers + 2))
+            data.close()
+
+            for i in range(self._number_of_layers + 2):
+                np.save("weights[" + str(i) + "].npy", self.layers[i])
+
+            os.chdir("..")
 
     def load(self):
-        pass
+        try:
+            os.chdir("Weights/")
+        except:
+            print("No data has been saved")
+            return
+
+        data = open("Number_of_layers.txt", "r")
+        number_of_layers = data.readline()
+        data.close()
+
+        # Loading all the weights
+        for i in range(int(number_of_layers)):
+            self.layers[i] = np.load("weights[" + str(i) + "].npy") # TODO: See why this isn´t working
 
 
     def sigmoid(self, a):
