@@ -9,10 +9,10 @@ class Neural_Network(object):
         self.hiddenSize = neurons_in_hidden
         self._number_of_layers = number_of_layers # Cause have the input and hidden
 
-        #weights
+                    # Creating the layer
+
         self.layers = []
 
-             # Creating the layer
         # Creating the first hidden layer
         self.layers.append(np.random.randn(self.inputSize, self.hiddenSize))
 
@@ -36,17 +36,24 @@ class Neural_Network(object):
     def load(self):
         pass
 
-    def forward(self, X):
+    def feedforward(self, X):
         #forward propagation through our network
-        self.z = np.dot(X, self.W1) # dot product of X (input) and first set of 3x2 weights
-        self.z2 = self.sigmoid(self.z) # activation function
-        self.z3 = np.dot(self.z2, self.W2) # dot product of hidden layer (z2) and second set of 3x1 weights
-        o = self.sigmoid(self.z3) # final activation function
-        return o
+        self.temp = []
 
-    def sigmoid(self, s):
+        self.z = np.dot(X, self.layers[0]) # Input Layer
+        self.z2 = self.sigmoid(self.z)
+        self.temp.append(self.z2)
+
+        for i in range(self._number_of_layers + 1): # The output layer will be processed here, therefore need a +1
+            self.z = np.dot(self.temp[i], self.layers[i + 1])
+            self.z2 = self.sigmoid(self.z)
+            self.temp.append(self.z2)
+
+        return self.z2
+
+    def sigmoid(self, a):
         # activation function
-        return 1/(1+np.exp(-s))
+        return 1 / (1 + np.exp(-a))
 
     def sigmoidPrime(self, s):
         #derivative of sigmoid
@@ -64,5 +71,5 @@ class Neural_Network(object):
         self.W2 += self.z2.T.dot(self.o_delta) # adjusting second set (hidden --> output) weights
 
     def train (self, X, y):
-        o = self.forward(X)
-        self.backpropagation(X, y, o)
+        o = self.feedforward(X)
+        # self.backpropagation(X, y, o)
