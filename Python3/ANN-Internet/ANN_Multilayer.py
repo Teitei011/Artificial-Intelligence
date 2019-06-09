@@ -2,10 +2,10 @@ import numpy as np
 
 
 class Neural_Network(object):
-    def __init__(self, _inputSize, _outputSize, neurons_in_hidden, number_of_layers, training_rate):
+    def __init__(self, inputSize, outputSize, neurons_in_hidden, number_of_layers, training_rate):
         #parameters
-        self._inputSize = _inputSize
-        self._outputSize = _outputSize
+        self._inputSize = inputSize
+        self._outputSize = outputSize
         self._hiddenSize = neurons_in_hidden
         self._number_of_layers = number_of_layers
         self._training_rate = training_rate
@@ -17,16 +17,16 @@ class Neural_Network(object):
 
         # Creating the first hidden layer
         self.layers.append(np.random.randn(self._inputSize, self._hiddenSize))
-        self.bias.append(np.random.randn(self._inputSize, self._hiddenSize))
+        self.bias.append(np.random.randn(self._hiddenSize))
 
         # For the hidden layers in the middle
         for i in range(self._number_of_layers):
             self.layers.append(np.random.randn(self._hiddenSize, self._hiddenSize))
-            self.bias.append(np.random.randn(self._hiddenSize, self._hiddenSize))
+            self.bias.append(np.random.randn(self._hiddenSize))
 
         # For the last hidden layer
         self.layers.append(np.random.randn(self._hiddenSize, self._outputSize))
-        self.bias.append(np.random.randn(self._hiddenSize, self._outputSize))
+        self.bias.append(np.random.randn(self._outputSize))
 
     def show(self):
         print("\n----------------------------------\n")
@@ -82,7 +82,7 @@ class Neural_Network(object):
         #forward propagation through our network
         self.forward_propagation = []
 
-        self.z = np.dot(X, self.layers[0]) + self.bias[i + 1] # Input Layer
+        self.z = np.dot(X, self.layers[0]) + self.bias[0] # Input Layer
         self.z2 = self.sigmoid(self.z)
         self.forward_propagation.append(self.z2)
 
