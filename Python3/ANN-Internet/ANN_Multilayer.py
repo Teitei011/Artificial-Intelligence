@@ -2,26 +2,27 @@ import numpy as np
 
 
 class Neural_Network(object):
-    def __init__(self, inputSize, outputSize, neurons_in_hidden, number_of_layers):
+    def __init__(self, _inputSize, _outputSize, neurons_in_hidden, number_of_layers, training_rate):
         #parameters
-        self.inputSize = inputSize
-        self.outputSize = outputSize
-        self.hiddenSize = neurons_in_hidden
-        self._number_of_layers = number_of_layers # Cause have the input and hidden
+        self._inputSize = _inputSize
+        self._outputSize = _outputSize
+        self._hiddenSize = neurons_in_hidden
+        self._number_of_layers = number_of_layers
+        self._training_rate = training_rate
 
                     # Creating the layer
 
         self.layers = []
 
         # Creating the first hidden layer
-        self.layers.append(np.random.randn(self.inputSize, self.hiddenSize))
+        self.layers.append(np.random.randn(self._inputSize, self._hiddenSize))
 
         # For the hidden layers in the middle
         for i in range(self._number_of_layers):
-            self.layers.append(np.random.randn(self.hiddenSize, self.hiddenSize))
+            self.layers.append(np.random.randn(self._hiddenSize, self._hiddenSize))
 
         # For the last hidden layer
-        self.layers.append(np.random.randn(self.hiddenSize, self.outputSize))
+        self.layers.append(np.random.randn(self._hiddenSize, self._outputSize))
 
     def show(self):
         print("\n----------------------------------\n")
@@ -82,7 +83,7 @@ class Neural_Network(object):
         print ("Loss: " + str(np.mean(np.square(Y - X)))) # mean sum squared loss
 
 
-    def train (self, X, y):
+    def train (self, X, Y):
         output = self.feedforward(X)
-        self.backpropagation(X, y, output)
+        self.backpropagation(X, Y, output)
         loss_function(output, Y)
