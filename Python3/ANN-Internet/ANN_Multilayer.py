@@ -82,12 +82,12 @@ class Neural_Network(object):
         #forward propagation through our network
         self.forward_propagation = []
 
-        self.z = np.dot(X, self.layers[0]) # Input Layer
+        self.z = np.dot(X, self.layers[0]) + self.bias[i + 1] # Input Layer
         self.z2 = self.sigmoid(self.z)
         self.forward_propagation.append(self.z2)
 
         for i in range(self._number_of_layers + 1): # The output layer will be processed here, therefore need a +1
-            self.z = np.dot(self.forward_propagation[i], self.layers[i + 1])
+            self.z = np.dot(self.forward_propagation[i], self.layers[i + 1]) + self.bias[i + 1]
             self.z2 = self.sigmoid(self.z)
             self.forward_propagation.append(self.z2)
 
