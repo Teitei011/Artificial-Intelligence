@@ -12,11 +12,11 @@ NN = ANN.Neural_Network(2, 1, 5, 10)
 NN.show()
 NN.feedforward(X)
 
-#
-# for i in range(10000): # trains the NN 1,000 times
-#     # print ("Input: \n" + str(X))
-#     # print ("Actual Output: \n" + str(y))
-#     # print ("Predicted Output: \n" + str(NN.forward(X)))
-#
-#     print ("Loss: " + str(np.mean(np.square(y - NN.feedforward(X))))) # mean sum squared loss
-#     NN.train(X, y)
+
+for i in range(10000): # trains the NN 1,000 times
+    # print ("Input: \n" + str(X))
+    # print ("Actual Output: \n" + str(y))
+    # print ("Predicted Output: \n" + str(NN.forward(X)))
+
+    # print ("Loss: " + str(np.mean(np.square(y - NN.feedforward(X))))) # mean sum squared loss
+    NN.train(X, y)
