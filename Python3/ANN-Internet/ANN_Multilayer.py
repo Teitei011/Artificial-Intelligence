@@ -59,6 +59,9 @@ class Neural_Network(object):
         #derivative of sigmoid
         return a * (1 - a)
 
+    def loss_function(self, X, Y):
+        print ("Loss: " + str(np.mean(np.square(Y - feedforward(X))))) # mean sum squared loss
+
     def backpropagation(self, X, y, o):
         # backward propgate through the network
         self.o_error = y - o # error in output
@@ -72,4 +75,5 @@ class Neural_Network(object):
 
     def train (self, X, y):
         o = self.feedforward(X)
-        # self.backpropagation(X, y, o)
+        self.backpropagation(X, y, o)
+        loss_function(X, Y)
