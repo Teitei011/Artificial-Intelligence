@@ -1,5 +1,5 @@
 import numpy as np
-
+from time import time
 
 class Neural_Network(object):
     def __init__(self, inputSize, outputSize, neurons_in_hidden, number_of_layers, training_rate):
@@ -15,9 +15,18 @@ class Neural_Network(object):
         self.layers = []
         self.bias = []
 
+        # Creating the first hidden layer
+        self.layers.append(np.random.randn(self._inputSize, self._hiddenSize))
+        self.bias.append(np.random.randn(self._hiddenSize))
 
-        self.bias = [np.random.randn(y, 1) for y in self._inputSize]
-        self.layers = [np.random.randn(y, x) for x, y in zip(self._outputSize, self._inputSize]
+        # For the hidden layers in the middle
+        for i in range(self._number_of_layers):
+            self.layers.append(np.random.randn(self._hiddenSize, self._hiddenSize))
+            self.bias.append(np.random.randn(self._hiddenSize))
+
+        # For the last hidden layer
+        self.layers.append(np.random.randn(self._hiddenSize, self._outputSize))
+        self.bias.append(np.random.randn(self._outputSize))
 
     def show(self):
         print("\n----------------------------------\n")
@@ -85,22 +94,18 @@ class Neural_Network(object):
         return self.z2
 
     def backpropagation(self, X, y, o):
+            self.z2_error_array = np.array([])
 
-        self.error_array = []
+            self.o_error = y - o # error in output
+            self.o_delta = self.o_error * self.sigmoidPrime(o) # applying derivative of sigmoid to error
 
-        self.o_error = y - o # error in output
-        self.o_delta = self.o_error * self.sigmoidPrime(o) # applying derivative of sigmoid to error
-        self.layers[0] += X.T.dot(self.o_delta)
+            for i in range(self._number_of_layers + 1):
+                self.z2_error = self.o_delta.dot(self.layers[i + 1].T) # z2 error: how much our hidden layer weights contributed to output error
+                self.z2_delta = self.z2_error * self.sigmoidPrime(self.z2) # applying derivative of sigmoid to z2 error
 
+                self.layers[i] += self.z2.T.dot(self.z2_delta)
 
-        for i in range(self._number_of_layers + 1):
-            # z error: how much our hidden layer weights contributed to output error
-            self.z_error = self.error_array[i].dot(self.layers[i + 1].T)
-
-             # applying derivative of sigmoid to z2 error
-            self.error_array.append(self.z_error * self.sigmoidPrime(self.forward_propagation[i + 1]))
-
-            self.layers[i + 1] += self.error_in_the_layers.T.dot(self.error_array[i])
+            self.layers[i + 1] += self.z2.T.dot(self.o_delta) # adjusting  (hidden --> output) weights
 
     def loss_function(self, X, Y):
         print ("Loss: " + str(np.mean(np.square(Y - X)))) # mean sum squared loss

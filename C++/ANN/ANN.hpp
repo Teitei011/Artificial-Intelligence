@@ -1,8 +1,10 @@
-#include <Eigen/Dense>
+#include "Eigen/Dense"
 #include <vector>
 #include <iostream>
 
 using Eigen::MatrixXd;
+using WeigthsVector = std::vector<MatrixXd>;
+
 
 class NeuralNetwork{
   int _number_of_layers;
@@ -12,14 +14,16 @@ class NeuralNetwork{
 
   double e{2.71828182845904523536};
 
-  std::vector<MatrixXd> _layers;
-  NeuralNetwork(int number_of_layers, int neurons, int input_layer, int output_layer, float learning_rate = 0.01);
+  WeigthsVector _layers;
 
 public:
-    std::vector<MatrixXd> createNetwork(int _number_of_layers, int _input_layer, int _neurons,  int _output_layer);
+
+    NeuralNetwork(int number_of_layers, int neurons, int input_layer, int output_layer, float learning_rate = 0.01);
+
+    void createNetwork(int _number_of_layers, int _input_layer, int _neurons,  int _output_layer);
 
     void show();
-    std::vector<MatrixXd> activation(std::vector<MatrixXd> *current);
+    void activation(std::vector<MatrixXd> *current);
 
     void saveBrain();
     void loadBrain();
@@ -39,40 +43,40 @@ NeuralNetwork::NeuralNetwork(int number_of_layers, int neurons, int input_layer,
    _learning_rate = learning_rate;
 
   // Creating all the layers
-   _layers = NeuralNetwork::createNetwork(_number_of_layers,  _input_layer, _neurons,  _output_layer);
+   NeuralNetwork::createNetwork(_number_of_layers,  _input_layer, _neurons,  _output_layer);
 
   show();
 }
 
-std::vector<MatrixXd> NeuralNetwork::createNetwork(int _number_of_layers, int _input_layer, int _neurons, int _output_layer){
-  std::vector<MatrixXd> layers;
+void NeuralNetwork::createNetwork(int _number_of_layers, int _input_layer, int _neurons, int _output_layer){
 
   for (int i = 0; i < _number_of_layers; ++i){
     // Input Layer
-    if (i == 0) layers.push_back(MatrixXd::Random(_input_layer, 1));
+    if (i == 0) _layers.push_back(MatrixXd::Random(_input_layer, 1));
 
     // Creating Hidden Layers
-    else if (i == 1) layers.push_back(MatrixXd::Random(_neurons, _neurons));
+    else if (i != 1 && i -1 != _number_of_layers) _layers.push_back(MatrixXd::Random(_neurons, _neurons));
 
     // Output Layer
-    else if (i - 1 == _number_of_layers) layers.push_back(MatrixXd::Random(_output_layer, 1));
+    else if (i - 1 == _number_of_layers) _layers.push_back(MatrixXd::Random(_output_layer, 1));
   }
-  return layers;
 }
 
 void NeuralNetwork::show(){
   for (int i = 0; i < _number_of_layers; ++i){
-    std::cout << layers[i]; << '\n';
+    if (i == 0) std::cout << "Input Layer: ";
+    if (i < _number_of_layers) std::cout << "Output Layer: ";
+    std::cout << _layers[i] << std::endl;
   }
 }
 
-std::vector<MatrixXd>NeuralNetwork::activation(std::vector<MatrixXd> *current){
-  new (&current) Map<MatrixXd>(1. / (1. +  e**(-data)));
+void NeuralNetwork::activation(std::vector<MatrixXd> *current){
+
 }
 
 
 void NeuralNetwork::saveBrain(){
-  
+
 }
 
 void loadBrain(){
