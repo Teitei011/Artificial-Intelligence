@@ -13,7 +13,6 @@ inputSize, outputSize, neurons_in_hidden, number_of_layers, training_rate = 2 ,1
 
 NN = ANN.Neural_Network(inputSize, outputSize, neurons_in_hidden, number_of_layers, training_rate)
 NN.show()
-NN.feedforward(X)
 
 
 for i in range(1): # trains the NN 1,000 times

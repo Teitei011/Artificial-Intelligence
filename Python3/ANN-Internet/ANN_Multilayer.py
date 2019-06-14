@@ -78,7 +78,7 @@ class Neural_Network(object):
         #derivative of sigmoid
         return a * (1 - a)
 
-    def feedforward(self, X):
+    def query(self, X):
         #forward propagation through our network
         self.forward_propagation = []
 
@@ -93,25 +93,40 @@ class Neural_Network(object):
 
         return self.z2
 
-    def backpropagation(self, X, y, o):
-            self.z2_error_array = np.array([])
+    def backpropagation(self, X, y):
 
-            self.o_error = y - o # error in output
-            self.o_delta = self.o_error * self.sigmoidPrime(o) # applying derivative of sigmoid to error
+        #forward propagation through our network
+        self.forward_propagation = []
 
-            for i in range(self._number_of_layers + 1):
-                self.z2_error = self.o_delta.dot(self.layers[i + 1].T) # z2 error: how much our hidden layer weights contributed to output error
-                self.z2_delta = self.z2_error * self.sigmoidPrime(self.z2) # applying derivative of sigmoid to z2 error
+        self.z = np.dot(X, self.layers[0]) + self.bias[0] # Input Layer
+        self.z2 = self.sigmoid(self.z)
+        self.forward_propagation.append(self.z2)
 
-                self.layers[i] += self.z2.T.dot(self.z2_delta)
+        for i in range(self._number_of_layers + 1): # The output layer will be processed here, therefore need a +1
+            self.z = np.dot(self.forward_propagation[i], self.layers[i + 1]) + self.bias[i + 1]
+            self.z2 = self.sigmoid(self.z)
+            self.forward_propagation.append(self.z2)
 
-            self.layers[i + 1] += self.z2.T.dot(self.o_delta) # adjusting  (hidden --> output) weights
+
+            #  backpropagation itself
+        self.z2_error_array = np.array([])
+
+        self.o_error = y - self.forward_propagation[0] # error in output
+        self.o_delta = self.o_error * self.sigmoidPrime(self.forward_propagation[0]) # applying derivative of sigmoid to error
+
+        for i in range(self._number_of_layers + 1):
+            self.z2_error = self.o_delta.dot(self.layers[i].T) # z2 error: how much our hidden layer weights contributed to output error
+            self.z2_delta = self.z2_error * self.sigmoidPrime(self.forward_propagation[i]) # applying derivative of sigmoid to z2 error
+
+            self.layers[i] += self.forward_propagation[i].T.dot(self.z2_delta)
+
+        self.layers[i] += self.self.forward_propagation[i].T.dot(self.o_delta) # adjusting  (hidden --> output) weights
 
     def loss_function(self, X, Y):
-        print ("Loss: " + str(np.mean(np.square(Y - X)))) # mean sum squared loss
+        return "Loss: " + str(np.mean(np.square(Y - X))) # mean sum squared loss
 
 
     def train (self, X, Y):
-        output = self.feedforward(X)
-        self.backpropagation(X, Y, output)
-        loss_function(output, Y)
+        self.backpropagation(X, Y)
+
+        print(loss_function(X, Y))
