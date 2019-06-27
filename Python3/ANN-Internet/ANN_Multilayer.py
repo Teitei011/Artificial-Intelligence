@@ -17,16 +17,17 @@ class Neural_Network(object):
 
         # Creating the first hidden layer
         self.layers.append(np.random.randn(self._inputSize, self._hiddenSize))
-        self.bias.append(np.random.randn(self._hiddenSize))
+        self.bias.append(np.random.randn(self._hiddenSize, self._hiddenSize))
+
 
         # For the hidden layers in the middle
         for i in range(self._number_of_layers):
             self.layers.append(np.random.randn(self._hiddenSize, self._hiddenSize))
-            self.bias.append(np.random.randn(self._hiddenSize))
+            self.bias.append(np.random.randn(self._hiddenSize, self._hiddenSize))
 
         # For the last hidden layer
         self.layers.append(np.random.randn(self._hiddenSize, self._outputSize))
-        self.bias.append(np.random.randn(self._outputSize))
+        self.bias.append(np.random.randn(self._hiddenSize, self._outputSize))
 
     def show(self):
         print("\n----------------------------------\n")
@@ -80,8 +81,8 @@ class Neural_Network(object):
 
     def query(self, X):
         #forward propagation through our network
-        self.forward_propagation = []
 
+        self.forward_propagation = []
         self.z = np.dot(X, self.layers[0]) + self.bias[0] # Input Layer
         self.z2 = self.sigmoid(self.z)
         self.forward_propagation.append(self.z2)
@@ -119,8 +120,6 @@ class Neural_Network(object):
             self.z2_delta = self.z2_error * self.sigmoidPrime(self.forward_propagation[i]) # applying derivative of sigmoid to z2 error
 
             self.layers[i] += self.forward_propagation[i].T.dot(self.z2_delta)
-
-        self.layers[i] += self.self.forward_propagation[i].T.dot(self.o_delta) # adjusting  (hidden --> output) weights
 
     def loss_function(self, X, Y):
         return "Loss: " + str(np.mean(np.square(Y - X))) # mean sum squared loss
