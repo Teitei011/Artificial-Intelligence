@@ -98,14 +98,10 @@ class Neural_Network(object):
 
         return self.z2
 
-    def backpropagation(self, X, y):
-        print("Backpropagation")
-    #forward propagation through our network
+    def forward(self, X):
         self.forward_propagation = []
-        self.z2 = []
-        self.z = np.dot(X, self.layers[0])# + self.bias[0] # Input Layer
+        self.z = np.dot(X, self.layers[0]) #+ self.bias[0] # Input Layer
         self.z2 = self.sigmoid(self.z)
-
         self.forward_propagation.append(self.z2)
 
         for i in range(self._number_of_layers + 1): # The output layer will be processed here, therefore need a +1
@@ -113,6 +109,12 @@ class Neural_Network(object):
             self.z2 = self.sigmoid(self.z)
             self.forward_propagation.append(self.z2)
 
+        return self.forward_propagation
+
+    def backpropagation(self, X, y):
+        print("Backpropagation")
+    #forward propagation through our network
+        self.forward_propagation = self.forward( X)
 
             #  backpropagation itself
 
