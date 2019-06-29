@@ -9,21 +9,19 @@ class NeuralNetwork():
         self._layers = layers
 
     def sigmoid(self, x):
-        return 1. / (1. + np.exp(-x))
+        return 1 / (1 + np.exp(-x))
 
     def sigmoid_derivative(self, x):
-        return x * (1. - x)
+        return x * (1 - x)
 
     def think(self, inputs):
         '''
             Forward propagation
         '''
-        output_from_layers = []
+        output_from_layers = np.dot(inputs, self._layers[0]._weights)
 
-        output_from_layers.append(np.dot(inputs, self._layers[0]._weights))
-
-        for i in range(1, len(self._layers)  - 1):
-            output_from_layers.append(np.dot(output_from_layers[i], self._layers[i + 1]._weights))
+        for i in range(1, len(self._layers)  - 2):
+            output_from_layers = np.dot(output_from_layers[i], self._layers[i + 1]._weights)
 
         return output_from_layers
 

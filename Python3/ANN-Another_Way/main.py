@@ -3,14 +3,19 @@ import numpy as np
 #Seed the random number generator
 np.random.seed(1)
 layers = []
-# Create layer 1 (4 neurons, each with 3 inputs)
+# Create layer 1 (40 neurons, each with 3 inputs)
 layer1 = NeuralLayer(4, 3)
 layers.append(layer1)
 
-# Create layer 2 (a single neuron with 4 inputs)
 
+# Create layer 2 (40 neurons with 40 inputs)
 layer2 = NeuralLayer(1, 4)
 layers.append(layer2)
+
+# # Create layer 2 (a single neuron with 4 inputs)
+# layer3 = NeuralLayer(1, 40)
+# layers.append(layer3)
+
 
 # Combine the layers to create a neural network
 neural_network = NeuralNetwork(layers)
@@ -32,4 +37,4 @@ neural_network.show()
 # Test the neural network with a new situation.
 print("\n\nStage 3) Considering a new situation [1, 1, 0] -> ?: ")
 output = neural_network.think(np.array([1, 1, 0]))
-print(output)
+print(output[-1])
