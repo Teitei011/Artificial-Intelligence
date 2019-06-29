@@ -16,11 +16,18 @@ class Neural_Network(object):
     self.hiddenSize = 3
 
     #weights
-    self.W1 = np.random.randn(self.inputSize, self.hiddenSize) # (3x2) weight matrix from input to hidden layer
+    # print("Initial Shapes: ")
+    self.W1 = np.random.randn(self.inputSize, self.hiddenSize) # (2x3) weight matrix from input to hidden layer
+    # print("W1 -->")
+    # print(self.W1.shape)
+    # print("W2 -->")
     self.W2 = np.random.randn(self.hiddenSize, self.outputSize) # (3x1) weight matrix from hidden to output layer
+    # print(self.W2.shape)
+    # print("\n\n")
 
   def forward(self, X):
     #forward propagation through our network
+    print(self.W1.shape)
     self.z = np.dot(X, self.W1) # dot product of X (input) and first set of 3x2 weights
     self.z2 = self.sigmoid(self.z) # activation function
     self.z3 = np.dot(self.z2, self.W2) # dot product of hidden layer (z2) and second set of 3x1 weights
@@ -37,11 +44,21 @@ class Neural_Network(object):
 
   def backward(self, X, y, o):
     # backward propgate through the network
+    print("Backpropagation...")
+    print("self.o_error")
     self.o_error = y - o # error in output
+    print(self.o_error.shape)
+    print("self.o_delta")
     self.o_delta = self.o_error*self.sigmoidPrime(o) # applying derivative of sigmoid to error
+    print(self.o_delta.shape)
 
+    print("self.z2_error")
     self.z2_error = self.o_delta.dot(self.W2.T) # z2 error: how much our hidden layer weights contributed to output error
+    print(self.z2_error.shape)
+
+    print("z2_delta")
     self.z2_delta = self.z2_error*self.sigmoidPrime(self.z2) # applying derivative of sigmoid to z2 error
+    print(self.z2_delta.shape)
 
     self.W1 += X.T.dot(self.z2_delta) # adjusting first set (input --> hidden) weights
     self.W2 += self.z2.T.dot(self.o_delta) # adjusting second set (hidden --> output) weights
@@ -51,10 +68,11 @@ class Neural_Network(object):
     self.backward(X, y, o)
 
 NN = Neural_Network()
-for i in range(10000): # trains the NN 1,000 times
-  print ("Input: \n" + str(X))
-  print ("Actual Output: \n" + str(y))
-  print ("Predicted Output: \n" + str(NN.forward(X)))
-  print ("Loss: \n" + str(np.mean(np.square(y - NN.forward(X))))) # mean sum squared loss
-  print ("\n")
+# print(NN.forward(X))
+for i in range(1): # trains the NN 1,000 times
+#   print ("Input: \n" + str(X))
+#   print ("Actual Output: \n" + str(y))
+#   print ("Predicted Output: \n" + str(NN.forward(X)))
+#   print ("Loss: \n" + str(np.mean(np.square(y - NN.forward(X))))) # mean sum squared loss
+#   print ("\n")
   NN.train(X, y)
